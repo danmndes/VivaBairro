@@ -1,0 +1,8 @@
+#Ignore node
+node_modules/
+
+#Ignore
+__pycache__
+
+#Ignore DS Store
+.DS_Store
