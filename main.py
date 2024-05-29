@@ -23,7 +23,7 @@ def load_user(user_id):
     return None
 
 with app.app_context():
-    db.create_all()  # Run once to create the database
+    db.create_all()  # Roda para criar o Banco de Dados
 
 def authenticate_user(username, password):
     models = [User, Merchant, Charity]
@@ -75,13 +75,6 @@ def dashboard():
         pages=paginated_merchants.pages
     )
 
-@app.route('/paginate_merchants')
-def paginate_merchants():
-    page = request.args.get('page', 1, type=int)
-    per_page = 12
-    paginated_merchants = Merchant.query.paginate(page, per_page, error_out=False)
-    return render_template('merchant_container.html', merchants=paginated_merchants.items)
-
 @app.route('/logout')
 @login_required
 def logout():
@@ -112,7 +105,7 @@ def create_user():
     password = request.form.get("password")
     bairro = request.form.get("bairro")
     tipo = request.form.get("tipo")
-    print(f"tipo é: {tipo}")
+
     atuacao = request.form.get("atuacao_loja") if tipo == "merchant" else request.form.get("atuacao_org")
     nome_local = request.form.get("shop_name") if tipo in ["merchant", "charity"] else None
 
@@ -148,4 +141,4 @@ def edit_user(id):
     return jsonify({"success": True, "message": "User updated successfully"}), 200
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(debug=True, port=8000)
