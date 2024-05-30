@@ -85,7 +85,6 @@
                                                 <h6>{{product.name}}</h6>
                                                 <p>Preço: {{product.price}}</p>
                                                 <p>Desconto: {{product.discount}}</p>
-                                                <p>{{product.path}}</p>
                                                 <a href="#" class="get-discount" data-toggle="modal" data-target="#qrModal" data-qrcode="data:image/png;base64,{{ product.path }}">Get Discount</a>
                                             </div>
                                             {% endif %}
@@ -102,7 +101,7 @@
                 </button>
             </div>
             <div class="modal-body">
-                <img id="qrImage" src="" alt="QR Code">
+                <img id="qrImage" src="../static/QR7.png" alt="QR Code">
             </div>
         </div>
     </div>
@@ -159,9 +158,19 @@
     $(document).ready(function() {
         $('.get-discount').click(function() {
             var qrCodeData = $(this).data('qrcode');
-            $('#qrImage').attr('src', qrCodeData);
+            $('#qrImage').attr('src',cortarString(qrCodeData, "VivaBairro"));
             $('#qrModal').modal('show');
         });
     });
+    function cortarString(str, palavraDeCorte) {
+        let posicaoDoCorte = str.indexOf(palavraDeCorte);
+        if (posicaoDoCorte !== -1) {
+            posicaoDoCorte += palavraDeCorte.length;
+            if (str.length > posicaoDoCorte) {
+                return ".." + str.substring(posicaoDoCorte);
+            }
+        }
+        return str;
+    }
 </script>
 </html>
