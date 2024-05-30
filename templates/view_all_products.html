@@ -1,0 +1,23 @@
+<h2>All Products</h2>
+<table>
+    <thead>
+        <tr>
+            <th>Nome</th>
+            <th>Preco</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% if products %}
+            {% for product in products %}
+            <tr>
+                <td>{{ product.name }}</td>
+                <td>{{ product.price }}</td>
+            </tr>
+            {% endfor %}
+        {% else %}
+            <tr>
+                <td colspan="2">No products available</td>
+            </tr>
+        {% endif %}
+    </tbody>
+</table>
