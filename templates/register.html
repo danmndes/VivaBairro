@@ -108,6 +108,9 @@
                 success: function(response) {
                     if (response.success) {
                         $('#message').removeClass('alert-danger').addClass('alert-success').text('Conta criada com sucesso!').show();
+                        setTimeout(() => {
+                            window.location.href = '/'
+                        }, 2500)
                     } else {
                         $('#message').removeClass('alert-success').addClass('alert-danger').text(response.error).show();
                     }

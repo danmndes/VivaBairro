@@ -1,7 +1,11 @@
 from flask import Flask, jsonify, request, render_template, redirect, url_for
-from models import db, User, Merchant, Charity
+from models import db, User, Merchant, Charity, Product
 from flask_bcrypt import Bcrypt
 from flask_login import login_user, LoginManager, login_required, logout_user, current_user
+import qrcode
+from io import BytesIO
+import base64
+import os
 
 app = Flask(__name__)
 app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///project.db"
@@ -24,6 +28,55 @@ def load_user(user_id):
 
 with app.app_context():
     db.create_all()  # Roda para criar o Banco de Dados
+
+def generate_qr_code(data):
+    qr = qrcode.QRCode(
+        version=1,
+        error_correction=qrcode.constants.ERROR_CORRECT_L,
+        box_size=10,
+        border=4,
+    )
+    current_directory = os.getcwd()
+    qr.add_data(data)
+    qr.make(fit=True)
+    img = qr.make_image(fill='black', back_color='white')
+    buffered = BytesIO()
+    path = f"{current_directory}/static/QR{current_user.id}.png"
+    img.save(path)
+    img_str = base64.b64encode(buffered.getvalue()).decode("utf-8")
+    return img_str, path
+
+@app.route('/add_product', methods=['POST'])
+@login_required
+def add_product():
+    if current_user.tipo == 'merchant':
+        name = request.form.get('name')
+        description = request.form.get('description')
+        price = float(request.form.get('price'))
+        discount = float(request.form.get('discount', 0))
+        visible = True if request.form.get('checkbox') != None else False
+        print(f"valor do check: {request.form.get('checkbox')}")
+        print(f"valor do visible: {visible}")
+        qr_code_data = f"Produto: {name}, Desconto: {discount}%"
+        qr_code, path = generate_qr_code(qr_code_data)
+        
+        product = Product(name=name, description=description, price=price, discount=discount, qr_code=qr_code, merchant_id=current_user.id, visible=visible, path=path)
+        db.session.add(product)
+        db.session.commit()
+        return jsonify({"success": True, "message": "Produco adicionado com sucesso"}), 201
+    return jsonify({"error": "Unauthorized"}), 403
+
+@app.route('/view_all_products')
+@login_required
+def view_all_products():
+    # Fetch products from database
+    produtos = db.session.query(Product).filter_by(merchant_id=current_user.id, visible=True)
+    return render_template('view_all_products.html', products=produtos)
+
+@app.route('/add_product_form')
+def add_product_form():
+    return render_template('add_product_form.html')
+
 
 def authenticate_user(username, password):
     models = [User, Merchant, Charity]
@@ -71,7 +124,7 @@ def dashboard():
         template,
         username=username,
         merchants=paginated_merchants.items,
-        page=paginated_merchants.page,
+        page=page,
         pages=paginated_merchants.pages
     )
 
@@ -139,6 +192,11 @@ def edit_user(id):
 
     db.session.commit()
     return jsonify({"success": True, "message": "User updated successfully"}), 200
+
+@app.route('/charity')
+def charity():
+    charity=Charity.query.filter_by(bairro=current_user.bairro).all()
+    return render_template('charity.html', charity=charity)
 
 if __name__ == "__main__":
     app.run(debug=True, port=8000)
