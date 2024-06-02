@@ -19,7 +19,7 @@
 <body>
     <!-- Navigation-->
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
-        <a class="navbar-brand" href="#">Navbar</a>
+        <a class="navbar-brand" href="#">VivaBairro</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
             aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
@@ -27,7 +27,7 @@
 
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav mr-auto">
-                <li class="nav-item"><a class="nav-link" aria-current="page" href="{{ url_for('homepage') }}">Inicio</a></li>
+                <li class="nav-item"><a class="nav-link" aria-current="page" href="{{ url_for('dashboard') }}">Inicio</a></li>
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button"
                         data-bs-toggle="dropdown" aria-expanded="false">Parceiros</a>
@@ -42,12 +42,12 @@
                     </ul>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="{{ url_for('instituicoes_sociais') }}">Instituições Sociais</a>
+                    <a class="nav-link" href="{{ url_for('charity') }}">Instituições Sociais</a>
                 </li>
             </ul>
             <ul class="navbar-nav my-2 my-sm-0">
                 <li class="nav-item">
-                    <a class="nav-link active" href="{{ url_for('profile', username=user['username']) }}">{{ user['username'] }}</a>
+                    <a class="nav-link active" href="{{ url_for('profile', username=username)}}">{{ username}}</a>
                 </li>
             </ul>
             <button class="btn my-2 my-sm-0" type="submit"><a href="{{ url_for('logout') }}">Sair</a></button>
@@ -57,7 +57,7 @@
     <header class="bg-dark py-5">
         <div class="container px-4 px-lg-5 my-5">
             <div class="text-center text-white">
-                <h1 class="display-4 fw-bolder">Perfil de {{ user['username'] }}</h1>
+                <h1 class="display-4 fw-bolder">Perfil de {{username}}</h1>
                 <p class="lead fw-normal text-white-50 mb-0">Veja e edite suas informações</p>
             </div>
         </div>
@@ -69,9 +69,8 @@
                 <div class="col-lg-4">
                     <div class="card mb-4">
                         <div class="card-body text-center">
-                            <h5 class="my-3">{{ user['name'] }}</h5>
-                            <p class="text-muted mb-1">{{ user['email'] }}</p>
-                            <p class="text-muted mb-4">Membro desde {{ user['joined'] }}</p>
+                            <h5 class="my-3">{{ username}}</h5>
+                            <p class="text-muted mb-1">{{email}}</p>
                         </div>
                     </div>
                 </div>
@@ -83,7 +82,7 @@
                                     <p class="mb-0">Nome</p>
                                 </div>
                                 <div class="col-sm-9">
-                                    <p class="text-muted mb-0">{{ user['name'] }}</p>
+                                    <p class="text-muted mb-0">{{ username }}</p>
                                 </div>
                             </div>
                             <hr>
@@ -92,7 +91,7 @@
                                     <p class="mb-0">Email</p>
                                 </div>
                                 <div class="col-sm-9">
-                                    <p class="text-muted mb-0">{{ user['email'] }}</p>
+                                    <p class="text-muted mb-0">{{ email }}</p>
                                 </div>
                             </div>
                             <hr>
@@ -101,7 +100,7 @@
                                     <p class="mb-0">Username</p>
                                 </div>
                                 <div class="col-sm-9">
-                                    <p class="text-muted mb-0">{{ user['username'] }}</p>
+                                    <p class="text-muted mb-0">{{ username }}</p>
                                 </div>
                             </div>
                             <hr>
@@ -110,7 +109,7 @@
                                     <p class="mb-0">Membro desde</p>
                                 </div>
                                 <div class="col-sm-9">
-                                    <p class="text-muted mb-0">{{ user['joined'] }}</p>
+
                                 </div>
                             </div>
                         </div>

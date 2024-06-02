@@ -120,12 +120,13 @@ def dashboard():
 
     template = 'nonuser_dashboard.html' if current_user.tipo != "user" else 'dashboard.html'
     username = current_user.shop_name if current_user.tipo != "user" else current_user.username
+    products = Product.query.filter_by(merchant_id=current_user.id)
     return render_template(
         template,
         username=username,
         merchants=paginated_merchants.items,
         page=page,
-        pages=paginated_merchants.pages
+        pages=paginated_merchants.pages,
     )
 
 @app.route('/logout')
@@ -148,7 +149,7 @@ def get_all_users():
 def profile(username):
     user = search_user(username)
     if user:
-        return render_template('profile.html', id=user.id, username=user.username, email=user.email, shop_name=user.shop_name, bairro=user.bairro, tipo=user.tipo)
+        return render_template('perfil.html', id=user.id, username=user.username, email=user.email, shop_name=user.shop_name, bairro=user.bairro, tipo=user.tipo)
     return jsonify({"error": "Profile not found"}), 404
 
 @app.route("/create_user", methods=['POST'])
@@ -196,7 +197,7 @@ def edit_user(id):
 @app.route('/charity')
 def charity():
     charity=Charity.query.filter_by(bairro=current_user.bairro).all()
-    return render_template('charity.html', charity=charity)
+    return render_template('instituicoessociais.html', instituicoes=charity, username=current_user.username)
 
 if __name__ == "__main__":
     app.run(debug=True, port=8000)
