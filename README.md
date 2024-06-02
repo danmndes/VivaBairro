@@ -6,3 +6,5 @@ python main.py
 
 
 ou python3 main.py se for linux ou mac
+
+Trabalho -> N702-Projeto aplic des sw etapa 2
