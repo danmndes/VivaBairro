@@ -7,4 +7,4 @@ python main.py
 
 ou python3 main.py se for linux ou mac
 
-Trabalho -> N702-Projeto aplic des sw etapa 2
+Trabalho -> N702-Projeto aplic des sw etapa 2 -> Feito em grupo por: Daniel Mendes, João Paulo Nascimento, Thiago Carneiro, Luiz Rebouças e Max Lima
